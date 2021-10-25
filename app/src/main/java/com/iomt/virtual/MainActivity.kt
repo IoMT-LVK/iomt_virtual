@@ -144,12 +144,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * val filter = ScanFilter.Builder().setServiceUuid(
-     * ParcelUuid.fromString(ENVIROMENTAL_SERVICE_UUID.toString())
-     * ).build()
-     */
-
     private val scanSettings = ScanSettings.Builder()
         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
         .build()
@@ -200,29 +194,7 @@ class MainActivity : AppCompatActivity() {
     private val scanResults = mutableListOf<ScanResult>()
     private val scanResultAdapter: ScanResultAdapter by lazy {
         ScanResultAdapter(scanResults) { result ->
-            if (isScanning) {
-                stopBleScan()
-            }
-            with(result.device) {
-                Log.w("ScanResultAdapter", "Connecting to $address")
-                connectGatt(applicationContext, false, gattCallback)
-            }
-        }
-    }
-
-    private val gattCallback = object : BluetoothGattCallback() {
-        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-            val deviceAddress = gatt.device.address
-
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    Log.w("BluetoothGatCallback", "Successfully connected to $deviceAddress")
-                    // TODO: store a reference to BluetoothGatt
-                } else if(newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    Log.w("BluetoothGatCallback", "Successfully disconnected to $deviceAddress")
-
-                }
-            }
+            //TODO: implement
         }
     }
 }
