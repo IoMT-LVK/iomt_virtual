@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
             }
             with(result.device) {
                 Log.w("ScanResultAdapter", "Connecting to $address")
-                connectGatt(context, false, gattCallback)
+                connectGatt(applicationContext, false, gattCallback)
             }
         }
     }
@@ -213,19 +213,16 @@ class MainActivity : AppCompatActivity() {
     private val gattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             val deviceAddress = gatt.device.address
+
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     Log.w("BluetoothGatCallback", "Successfully connected to $deviceAddress")
                     // TODO: store a reference to BluetoothGatt
                 } else if(newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    Log.w("BluetoothGatCallback", "Successfully disconnected from $deviceAddress")
-                    gatt.close()
+                    Log.w("BluetoothGatCallback", "Successfully disconnected to $deviceAddress")
+
                 }
-            } else {
-                Log.w("BluetoothGatCallback", "Error $status encountered for $deviceAddress! Disconnecting...")
-                gatt.close()
             }
         }
     }
-
 }
