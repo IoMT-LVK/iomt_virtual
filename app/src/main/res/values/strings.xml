@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Virtual Device</string>
+    <string name="scan">Scan</string>
+    <string name="device_name">TextView</string>
+    <string name="send_button">Send data</string>
+    <string name="disconnect_button">Disconnect</string>
 </resources>

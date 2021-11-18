@@ -19,10 +19,10 @@ import android.os.ParcelUuid
 import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.scan_results_recycler_view
-import kotlinx.android.synthetic.main.activity_main.scan_button
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.iomt.virtual.databinding.ConnectedDeviceActivityBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
 private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
 private const val LOCATION_PERMISSION_REQUEST_CODE = 2
@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         scan_button.setOnClickListener { if (isScanning) stopBleScan() else startBleScan() }
+        test_button.setOnClickListener {
+
+        }
         setupRecyclerView()
     }
 
@@ -193,8 +196,6 @@ class MainActivity : AppCompatActivity() {
 
     private val scanResults = mutableListOf<ScanResult>()
     private val scanResultAdapter: ScanResultAdapter by lazy {
-        ScanResultAdapter(scanResults) { result ->
-            //TODO: implement
-        }
+        ScanResultAdapter(scanResults, this)
     }
 }
