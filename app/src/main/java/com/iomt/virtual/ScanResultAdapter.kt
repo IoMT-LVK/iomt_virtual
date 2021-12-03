@@ -1,7 +1,9 @@
 package com.iomt.virtual
 
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.le.ScanResult
 import android.content.Intent
+import android.os.Binder
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +52,7 @@ class ScanResultAdapter(
                     .putExtra("DEVICE_NAME", view.device_name.text.toString())
                     .putExtra("MAC_ADDRESS", view.mac_address.text.toString())
                     .putExtra("SIGNAL_STRENGTH", view.signal_strength.text.toString())
+                    .putExtra("DEVICE", result.device)
                 startActivity(parentActivity, intent, null)
             }
         }
