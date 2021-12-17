@@ -1,28 +1,22 @@
 package com.iomt.virtual
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import android.Manifest
 import android.app.AlertDialog
 import android.bluetooth.*
-import android.bluetooth.BluetoothProfile.GATT
 import android.bluetooth.le.*
-import android.icu.util.TimeUnit
-import android.os.Handler
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.Manifest
+import android.os.Bundle
 import android.os.ParcelUuid
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+
 import java.util.*
 
 private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
@@ -45,6 +39,8 @@ class MainActivity : AppCompatActivity() {
                 BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_NOTIFY,
                 BluetoothGattCharacteristic.PERMISSION_READ
             )
+            val heartRateDescriptor = BluetoothGattDescriptor(heartRateDescriptorUUID, BluetoothGattDescriptor.PERMISSION_READ)
+            heartRateCharacteristic.addDescriptor(heartRateDescriptor)
             heartRateService.addCharacteristic(heartRateCharacteristic)
             it.addService(heartRateService)
         }
@@ -80,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     private val heartRateServiceUUID: UUID = UUID.fromString("0000180d-0000-1000-8000-00805f9b34fb")
     private val heartRateCharacteristicUUID: UUID = UUID.fromString("00002a37-0000-1000-8000-00805f9b34fb")
+    private val heartRateDescriptorUUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
     private var isSending: Boolean = false
     private var connectedDevice: BluetoothDevice? = null
@@ -119,6 +116,14 @@ class MainActivity : AppCompatActivity() {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
             Log.d(debugTag, "READ called onCharacteristicReadRequest ${characteristic?.uuid ?: "UNDEFINED"}")
             if (characteristic?.uuid == heartRateCharacteristicUUID) {
+                gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, bytesToSend)
+            }
+        }
+
+        override fun onDescriptorReadRequest(device: BluetoothDevice?, requestId: Int, offset: Int, descriptor: BluetoothGattDescriptor?) {
+            super.onDescriptorReadRequest(device, requestId, offset, descriptor)
+            Log.d(debugTag, "READ called onDescriptorReadRequest ${descriptor?.uuid ?: "UNDEFINED"}")
+            if (descriptor?.uuid == heartRateDescriptorUUID) {
                 gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, bytesToSend)
             }
         }
@@ -195,8 +200,9 @@ class MainActivity : AppCompatActivity() {
         object: Thread() {
             override fun run() {
                 while(isSending) {
-                    readCharacteristic.value = byteArrayOf(i.toByte())
                     bytesToSend = byteArrayOf(i.toByte())
+                    readCharacteristic.value = bytesToSend
+                    readCharacteristic.getDescriptor(heartRateDescriptorUUID).value = bytesToSend
                     Log.d(debugTag, "Sending notification ${readCharacteristic.value}")
                     val isNotified = gattServer.notifyCharacteristicChanged(connectedDevice, readCharacteristic, false)
                     Log.d(debugTag, if (isNotified) { "Notification sent." } else { "Notification is not sent." })
