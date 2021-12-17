@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,39 +7,60 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/scan_button"
+        android:id="@+id/send_button"
         android:layout_width="165dp"
         android:layout_height="54dp"
-        android:layout_marginStart="158dp"
         android:layout_marginTop="153dp"
-        android:layout_marginEnd="165dp"
-        android:text="@string/scan"
+        android:text="@string/start_sending"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/scan_results_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scan_button"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/row_scan_result" />
-
-    <Button
-        android:id="@+id/test_button"
+    <TextView
+        android:id="@+id/device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/scan_button"
+        android:text="@string/unknown"
+        app:layout_constraintBottom_toTopOf="@+id/send_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mac_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unknown"
+        app:layout_constraintBottom_toTopOf="@+id/send_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_name" />
+
+    <SeekBar
+        android:id="@+id/delay_bar"
+        android:layout_width="278dp"
+        android:layout_height="72dp"
+        android:indeterminateTint="@color/purple_700"
+        android:max="1010"
+        android:min="10"
+        android:progress="505"
+        android:progressBackgroundTint="@color/purple_500"
+        android:progressTint="@color/purple_500"
+        android:thumbTint="@color/purple_700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/send_button" />
+
+    <TextView
+        android:id="@+id/delay_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unknown"
+        app:layout_constraintBottom_toBottomOf="@+id/delay_bar"
+        app:layout_constraintEnd_toEndOf="@+id/delay_bar"
+        app:layout_constraintStart_toStartOf="@+id/delay_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
